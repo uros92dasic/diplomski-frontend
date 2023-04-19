@@ -1,6 +1,7 @@
 import React, { Component, SyntheticEvent } from 'react';
-import '../Login.css';
+import { Navigate } from 'react-router-dom';
 import axios from "axios";
+import '../Login.css';
 
 //the only example of class components in the project
 class Register extends Component {
@@ -10,6 +11,9 @@ class Register extends Component {
     password = '';
     passwordConfirm = '';
     roleId = 1;
+    state = {
+        redirect: false
+    };
 
     submit = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -23,10 +27,16 @@ class Register extends Component {
             roleId: 1
         });
 
-        console.log(response);
+        this.setState({
+            redirect: true
+        });
     }
 
     render() {
+        if (this.state.redirect) {
+            return <Navigate replace to={'/login'} />;
+        }
+
         return (
             <main className="form-signin w-100 m-auto">
                 <form onSubmit={this.submit}>

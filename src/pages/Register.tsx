@@ -1,5 +1,6 @@
 import React, { Component, SyntheticEvent } from 'react';
 import '../Login.css';
+import axios from "axios";
 
 //the only example of class components in the project
 class Register extends Component {
@@ -8,17 +9,21 @@ class Register extends Component {
     email = '';
     password = '';
     passwordConfirm = '';
+    roleId = 1;
 
-    submit = (e: SyntheticEvent) => {
+    submit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        console.log({
-            firstName: this.firstName,
+        const response = await axios.post('http://localhost:8000/api/register', {
+            firstName: this.lastName,
             lastName: this.lastName,
             email: this.email,
             password: this.password,
-            passwordConfirm: this.passwordConfirm
-        })
+            passwordConfirm: this.passwordConfirm,
+            roleId: 1
+        });
+
+        console.log(response);
     }
 
     render() {

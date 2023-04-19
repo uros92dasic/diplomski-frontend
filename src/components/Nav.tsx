@@ -20,8 +20,8 @@ const Nav = () => {
         )();
     }, []);
 
-    const logout = () => {
-        console.log("logout");
+    const logout = async () => {
+        await axios.post('logout', {});
     }
 
     return (

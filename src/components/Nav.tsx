@@ -1,21 +1,23 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { User } from "../models/user";
 
 const Nav = () => {
-    const [user, setUser] = useState(
-        {
-            firstName: '',
-            lastName: '',
-            email: ''
-        });
+    const [user, setUser] = useState(new User());
 
     useEffect(() => {
         (
             async () => {
                 const { data } = await axios.get('user');
 
-                setUser(data);
+                setUser(new User(
+                    data.id,
+                    data.firstName,
+                    data.lastName,
+                    data.email,
+                    data.role
+                ));
             }
         )();
     }, []);
@@ -38,7 +40,7 @@ const Nav = () => {
                             to="/profile"
                             className="nav-link px-3 text-decoration-none"
                         >
-                            {user?.firstName} {user?.lastName}
+                            {user?.name}
                         </Link>
 
                         <Link

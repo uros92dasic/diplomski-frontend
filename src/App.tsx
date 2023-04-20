@@ -12,6 +12,9 @@ import UserEdit from './pages/users/UserEdit';
 import Roles from './pages/roles/Roles';
 import RoleCreate from './pages/roles/RoleCreate';
 import RoleEdit from './pages/roles/RoleEdit';
+import Products from './pages/products/Products';
+import ProductCreate from './pages/products/ProductCreate';
+import ProductEdit from './pages/products/ProductEdit';
 
 function App() {
   return (
@@ -28,6 +31,9 @@ function App() {
           <Route path={"/roles"} element={<Roles />} />
           <Route path={"/roles/create"} element={<RoleCreate />} />
           <Route path={"/roles/:id/edit"} element={<RoleEdit />} />
+          <Route path={"/products"} element={<Products />} />
+          <Route path={"/products/create"} element={<ProductCreate />} />
+          <Route path={"/products/:id/edit"} element={<ProductEdit />} />
         </Routes>
 
       </BrowserRouter>

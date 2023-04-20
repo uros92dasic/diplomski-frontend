@@ -24,6 +24,9 @@ const Nav = () => {
 
     const logout = async () => {
         await axios.post('logout', {});
+
+        localStorage.removeItem('jwt_access_token');
+        localStorage.removeItem('jwt_refresh_token');
     }
 
     return (

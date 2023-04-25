@@ -1,15 +1,14 @@
+// models/user.ts
 import { Role } from "./role";
 
-export class User {
-    constructor(
-        public id: number = 0,
-        public firstName: string = "",
-        public lastName: string = "",
-        public email: string = "",
-        public role = new Role()
-    ) { }
-
-    get name() {
-        return this.firstName + " " + this.lastName;
-    }
+export interface User {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    role: Role;
 }
+
+export const getUserName = (user: User): string => {
+    return `${user.firstName} ${user.lastName}`;
+};

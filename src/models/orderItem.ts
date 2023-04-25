@@ -1,10 +1,9 @@
+// models/orderItem.ts
 import { Product } from "./product";
 
-export class OrderItem {
-    constructor(
-        public id: number = 0,
-        public productId: number = 0,
-        public product: Product = new Product(),
-        public quantity: number = 0
-    ) { }
+export interface OrderItem {
+    id: number;
+    productId: number;
+    product: Product;
+    quantity: number;
 }

@@ -1,9 +1,8 @@
+// models/role.ts
 import { RolePermission } from "./rolePermission";
 
-export class Role {
-    constructor(
-        public id: number = 0,
-        public name: string = "",
-        public rolePermissions: RolePermission[] = []
-    ) { }
+export interface Role {
+    id: number;
+    name: string;
+    rolePermissions: RolePermission[];
 }

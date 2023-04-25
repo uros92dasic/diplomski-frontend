@@ -1,3 +1,5 @@
-export class Permission {
-    constructor(public id: number = 0, public name: string = "") { }
+// models/permission.ts
+export interface Permission {
+    id: number;
+    name: string;
 }

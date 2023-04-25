@@ -1,20 +1,35 @@
 import { User } from "../../models/user";
 import { SET_USER, SetUserAction } from "../actions/setUserAction";
+import { AnyAction } from "redux";
 
 export interface UserState {
     user: User;
 }
 
 const initialState: UserState = {
-    user: new User(),
+    user: {
+        id: 0,
+        firstName: "",
+        lastName: "",
+        email: "",
+        role: {
+            id: 0,
+            name: "",
+            rolePermissions: [],
+        },
+    },
 };
 
-export const setUserReducer = (state: UserState = initialState, action: SetUserAction): UserState => {
+export const setUserReducer = (
+    state: UserState = initialState,
+    action: AnyAction
+): UserState => {
     switch (action.type) {
         case SET_USER:
+            const setUserAction = action as SetUserAction;
             return {
                 ...state,
-                user: action.user,
+                user: setUserAction.user,
             };
         default:
             return state;

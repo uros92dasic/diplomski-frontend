@@ -18,10 +18,10 @@ const Paginator = (props: { page: number, lastPage: number, pageChanged: (page: 
         <nav>
             <ul className="pagination">
                 <li className="page-item">
-                    <button className="page-link" onClick={handlePrevious}>Previous</button>
+                    <button type="button" className="page-link" onClick={handlePrevious}>Previous</button>
                 </li>
                 <li className="page-item">
-                    <button className="page-link" onClick={handleNext}>Next</button>
+                    <button type="button" className="page-link" onClick={handleNext}>Next</button>
                 </li>
             </ul>
         </nav>

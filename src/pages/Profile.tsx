@@ -32,7 +32,7 @@ const Profile = () => {
             }
             setLoading(false);
 
-            console.log(user);
+            // console.log(user);
         })();
     }, [dispatch]);
 

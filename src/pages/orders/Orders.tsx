@@ -89,7 +89,7 @@ const Orders = () => {
                                             </button>
 
                                             <div className="btn-group mr-2">
-                                                <Link to={`/orders/${order.id}/edit`} className="btn btn-sm btn-outline-secondary">Edit</Link>
+                                                <Link to={`/orders/export/${order.id}`} className="btn btn-sm btn-outline-secondary">Export</Link>
                                             </div>
 
                                             <div className="btn-group mr-2">

@@ -1,4 +1,3 @@
-// models/orderItem.ts
 import { Product } from "./product";
 
 export interface OrderItem {

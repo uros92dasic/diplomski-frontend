@@ -1,4 +1,3 @@
-// models/order.ts
 import { OrderItem } from "./orderItem";
 import { User } from "./user";
 

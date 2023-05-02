@@ -1,4 +1,3 @@
-// models/role.ts
 import { RolePermission } from "./rolePermission";
 
 export interface Role {

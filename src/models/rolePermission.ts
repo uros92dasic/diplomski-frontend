@@ -1,4 +1,3 @@
-// models/rolePermission.ts
 import { Role } from "./role";
 import { Permission } from "./permission";
 

@@ -13,8 +13,8 @@ type WrapperProps = {
 
 const Wrapper = (props: WrapperProps) => {
     const [redirect, setRedirect] = useState(false);
-    const dispatch = useDispatch(); // Get the dispatch function from Redux
-    const user = useSelector((state: RootState) => state.user.user); // Get the user from the Redux state 
+    const dispatch = useDispatch();
+    const user = useSelector((state: RootState) => state.user.user);
 
     useEffect(() => {
         (async () => {

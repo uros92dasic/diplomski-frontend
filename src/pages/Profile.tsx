@@ -22,17 +22,15 @@ const Profile = () => {
                 const { data } = await axios.get("user");
                 dispatch(setUser(data));
 
-                setFirstName(data.firstName); // Update this line
-                setLastName(data.lastName); // Update this line
-                setEmail(data.email); // Update this line
+                setFirstName(data.firstName);
+                setLastName(data.lastName);
+                setEmail(data.email);
             } else {
                 setFirstName(user.firstName);
                 setLastName(user.lastName);
                 setEmail(user.email);
             }
             setLoading(false);
-
-            // console.log(user);
         })();
     }, [dispatch]);
 

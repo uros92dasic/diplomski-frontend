@@ -17,7 +17,7 @@ import ProductCreate from './pages/products/ProductCreate';
 import ProductEdit from './pages/products/ProductEdit';
 import Orders from './pages/orders/Orders';
 import OrderCreate from './pages/orders/OrderCreate';
-import OrderEdit from './pages/orders/OrderEdit';
+import OrderExport from './pages/orders/OrderExport';
 
 function App() {
   return (
@@ -39,7 +39,7 @@ function App() {
           <Route path={"/products/:id/edit"} element={<ProductEdit />} />
           <Route path={"/orders"} element={<Orders />} />
           <Route path={"/orders/create"} element={<OrderCreate />} />
-          <Route path={"/orders/:id/edit"} element={<OrderEdit />} />
+          <Route path={"/orders/export/:orderId"} element={<OrderExport />} />
         </Routes>
 
       </BrowserRouter>

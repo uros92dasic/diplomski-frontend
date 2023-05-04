@@ -9,6 +9,7 @@ import { setUser } from "../../redux/actions/setUserAction";
 import SelectProductModal from "./SelectProductModal";
 import { Product } from "../../models/product";
 import { OrderItem } from "../../models/orderItem";
+import withPermission from "../../permissions/withPermission";
 
 interface OrderProduct extends Omit<OrderItem, "id" | "productId" | "quantity"> {
     productId: string;
@@ -136,4 +137,4 @@ const OrderCreate = () => {
     );
 };
 
-export default OrderCreate;
+export default withPermission(OrderCreate, 'editOrders');

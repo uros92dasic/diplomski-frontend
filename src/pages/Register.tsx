@@ -2,6 +2,7 @@ import React, { Component, SyntheticEvent } from 'react';
 import { Navigate } from 'react-router-dom';
 import axios from "axios";
 import '../Login.css';
+import { Link } from 'react-router-dom';
 
 //the only example of class components in the project
 class Register extends Component {
@@ -63,6 +64,7 @@ class Register extends Component {
                     />
 
                     <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+                    <Link className="w-100 btn btn-lg btn-secondary mt-2" to="/login">Login</Link>
                 </form>
             </main>
         );

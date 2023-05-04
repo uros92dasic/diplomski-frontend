@@ -3,6 +3,7 @@ import React, { SyntheticEvent, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import Wrapper from "../../components/Wrapper";
 import { Role } from "../../models/role";
+import withPermission from "../../permissions/withPermission";
 
 const UserCreate = () => {
     const [firstName, setFirstName] = useState('');
@@ -74,4 +75,4 @@ const UserCreate = () => {
     );
 }
 
-export default UserCreate;
+export default withPermission(UserCreate, 'editUsers');

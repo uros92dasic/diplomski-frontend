@@ -4,6 +4,7 @@ import { Navigate, useParams } from "react-router-dom";
 import Wrapper from "../../components/Wrapper";
 import { Permission } from "../../models/permission";
 import { RolePermission } from "../../models/rolePermission";
+import withPermission from "../../permissions/withPermission";
 
 const RoleEdit = () => {
     const [name, setName] = useState('');
@@ -85,4 +86,4 @@ const RoleEdit = () => {
     );
 }
 
-export default RoleEdit;
+export default withPermission(RoleEdit, 'editRoles');

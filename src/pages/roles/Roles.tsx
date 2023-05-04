@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Wrapper from "../../components/Wrapper";
 import { Role } from "../../models/role";
+import withPermission from "../../permissions/withPermission";
 
 const Roles = () => {
     const [roles, setRoles] = useState([]);
@@ -64,4 +65,4 @@ const Roles = () => {
     );
 }
 
-export default Roles;
+export default withPermission(Roles, 'viewRoles');

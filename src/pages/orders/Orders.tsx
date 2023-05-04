@@ -5,6 +5,7 @@ import { Order } from '../../models/order';
 import { OrderItem } from '../../models/orderItem';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import withPermission from '../../permissions/withPermission';
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
@@ -135,4 +136,4 @@ const Orders = () => {
     );
 };
 
-export default Orders;
+export default withPermission(Orders, 'viewOrders');

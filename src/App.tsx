@@ -18,6 +18,7 @@ import ProductEdit from './pages/products/ProductEdit';
 import Orders from './pages/orders/Orders';
 import OrderCreate from './pages/orders/OrderCreate';
 import OrderExport from './pages/orders/OrderExport';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           <Route path={"/orders"} element={<Orders />} />
           <Route path={"/orders/create"} element={<OrderCreate />} />
           <Route path={"/orders/export/:orderId"} element={<OrderExport />} />
+          <Route path={"*"} element={<NotFound />} />
         </Routes>
 
       </BrowserRouter>

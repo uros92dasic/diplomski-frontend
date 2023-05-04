@@ -3,6 +3,7 @@ import React, { SyntheticEvent, useState } from "react";
 import { Navigate } from "react-router-dom";
 import ImageUpload from "../../components/ImageUpload";
 import Wrapper from "../../components/Wrapper";
+import withPermission from "../../permissions/withPermission";
 
 const ProductCreate = () => {
     const [title, setTitle] = useState('');
@@ -65,4 +66,4 @@ const ProductCreate = () => {
     );
 }
 
-export default ProductCreate;
+export default withPermission(ProductCreate, 'editProducts');

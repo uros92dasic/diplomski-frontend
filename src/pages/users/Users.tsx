@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Paginator from "../../components/Paginator";
 import Wrapper from "../../components/Wrapper";
 import { User } from "../../models/user";
+import withPermission from "../../permissions/withPermission";
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -74,4 +75,4 @@ const Users = () => {
     )
 }
 
-export default Users;
+export default withPermission(Users, 'viewUsers');

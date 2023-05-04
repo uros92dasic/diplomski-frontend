@@ -4,12 +4,16 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/reducers";
 import { getUserName } from "../models/user";
+import { useDispatch } from "react-redux";
+import { clearUser } from "../redux/actions/setUserAction";
 
 const Nav = () => {
+    const dispatch = useDispatch()
     const user = useSelector((state: RootState) => state.user.user);
 
     const logout = async () => {
         await axios.post("logout", {});
+        dispatch(clearUser());
     };
 
     return (
@@ -29,12 +33,12 @@ const Nav = () => {
                 >
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <input
+                {/* <input
                     className="form-control form-control-dark w-100 rounded-0 border-0"
                     type="text"
                     placeholder="Search"
                     aria-label="Search"
-                />
+                /> */}
                 <div className="navbar-nav">
                     <div className="nav-item text-nowrap">
                         <Link to="/profile" className="nav-link px-3 text-decoration-none">

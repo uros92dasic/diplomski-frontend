@@ -1,9 +1,9 @@
-// OrderExport.tsx
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Wrapper from '../../components/Wrapper';
 import axios from 'axios';
 import { Order } from '../../models/order';
+import withPermission from '../../permissions/withPermission';
 
 const OrderExport: React.FC = () => {
     const { orderId } = useParams<{ orderId: string }>();
@@ -70,4 +70,4 @@ const OrderExport: React.FC = () => {
     );
 };
 
-export default OrderExport;
+export default withPermission(OrderExport, 'editOrders');

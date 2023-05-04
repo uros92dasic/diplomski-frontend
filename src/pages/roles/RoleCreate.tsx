@@ -3,6 +3,7 @@ import React, { SyntheticEvent, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import Wrapper from "../../components/Wrapper";
 import { Permission } from "../../models/permission";
+import withPermission from "../../permissions/withPermission";
 
 const RoleCreate = () => {
     const [name, setName] = useState('');
@@ -74,4 +75,4 @@ const RoleCreate = () => {
     );
 }
 
-export default RoleCreate;
+export default withPermission(RoleCreate, 'editRoles');

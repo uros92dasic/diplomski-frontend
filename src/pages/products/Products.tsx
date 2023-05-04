@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Paginator from "../../components/Paginator";
 import Wrapper from "../../components/Wrapper";
 import { Product } from "../../models/product";
+import withPermission from "../../permissions/withPermission";
 
 const Products = () => {
     const [products, setProducts] = useState([]);
@@ -76,4 +77,4 @@ const Products = () => {
     );
 }
 
-export default Products;
+export default withPermission(Products, 'viewProducts');

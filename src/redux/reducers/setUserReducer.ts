@@ -1,6 +1,5 @@
 import { User } from "../../models/user";
-import { SET_USER, SetUserAction } from "../actions/setUserAction";
-import { AnyAction } from "redux";
+import { SET_USER, SetUserAction, CLEAR_USER, ClearUserAction } from "../actions/setUserAction";
 
 export interface UserState {
     user: User;
@@ -22,7 +21,7 @@ const initialState: UserState = {
 
 export const setUserReducer = (
     state: UserState = initialState,
-    action: AnyAction
+    action: SetUserAction | ClearUserAction
 ): UserState => {
     switch (action.type) {
         case SET_USER:
@@ -30,6 +29,11 @@ export const setUserReducer = (
             return {
                 ...state,
                 user: setUserAction.user,
+            };
+        case CLEAR_USER:
+            return {
+                ...state,
+                user: initialState.user,
             };
         default:
             return state;

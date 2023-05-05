@@ -4,8 +4,13 @@ import { Link } from "react-router-dom";
 import Wrapper from "../../components/Wrapper";
 import { Role } from "../../models/role";
 import withPermission from "../../permissions/withPermission";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/reducers";
 
 const Roles = () => {
+    const currentUser = useSelector((state: RootState) => state.user.user);
+    const currentUserRoleId = currentUser?.role.id;
+
     const [roles, setRoles] = useState([]);
 
     useEffect(() => {
@@ -43,6 +48,7 @@ const Roles = () => {
                     </thead>
                     <tbody>
                         {roles.map((role: Role) => {
+                            const isCurrentRoleCreator = role.id === currentUserRoleId;
                             return (
                                 <tr key={role.id}>
                                     <td>{role.id}</td>
@@ -51,9 +57,11 @@ const Roles = () => {
                                         <div className="btn-group mr-2">
                                             <Link to={`/roles/${role.id}/edit`} className="btn btn-sm btn-outline-secondary">Edit</Link>
                                         </div>
-                                        <div className="btn-group mr-2">
-                                            <button className="btn btn-sm btn-outline-secondary" onClick={() => handleDelete(role.id)}>Delete</button>
-                                        </div>
+                                        {!isCurrentRoleCreator && (
+                                            <div className="btn-group mr-2">
+                                                <button className="btn btn-sm btn-outline-secondary" onClick={() => handleDelete(role.id)}>Delete</button>
+                                            </div>
+                                        )}
                                     </td>
                                 </tr>
                             );

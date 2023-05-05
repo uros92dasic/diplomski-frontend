@@ -4,8 +4,14 @@ import { Navigate, useParams } from "react-router-dom";
 import ImageUpload from "../../components/ImageUpload";
 import Wrapper from "../../components/Wrapper";
 import withPermission from "../../permissions/withPermission";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/reducers";
 
 const ProductEdit = () => {
+    const currentUser = useSelector((state: RootState) => state.user.user);
+    const currentUserId = currentUser?.id;
+    const [unauthorized, setUnauthorized] = useState(false);
+
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
@@ -19,13 +25,17 @@ const ProductEdit = () => {
             async () => {
                 const { data } = await axios.get(`products/${id}`);
 
-                setTitle(data.title);
-                setDescription(data.description);
-                setImage(data.image);
-                setPrice(data.price);
+                if (data.userId !== currentUserId) {
+                    setUnauthorized(true);
+                } else {
+                    setTitle(data.title);
+                    setDescription(data.description);
+                    setImage(data.image);
+                    setPrice(data.price);
+                }
             }
         )();
-    }, [id]);
+    }, [id, currentUserId]);
 
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -48,6 +58,9 @@ const ProductEdit = () => {
     }
 
     if (redirect) {
+        return <Navigate replace to={'/products'} />;
+    }
+    if (unauthorized) {
         return <Navigate replace to={'/products'} />;
     }
 

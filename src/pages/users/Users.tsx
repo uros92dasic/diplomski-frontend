@@ -5,8 +5,13 @@ import Paginator from "../../components/Paginator";
 import Wrapper from "../../components/Wrapper";
 import { User } from "../../models/user";
 import withPermission from "../../permissions/withPermission";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/reducers";
 
 const Users = () => {
+    const currentUser = useSelector((state: RootState) => state.user.user);
+    const currentUserId = currentUser?.id;
+
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(0);
@@ -49,6 +54,7 @@ const Users = () => {
                     </thead>
                     <tbody>
                         {users.map((user: User) => {
+                            const isCurrentUserCreator = user.id === currentUserId;
                             return (
                                 <tr key={user.id}>
                                     <td>{user.id}</td>
@@ -59,9 +65,11 @@ const Users = () => {
                                         <div className="btn-group mr-2">
                                             <Link to={`/users/${user.id}/edit`} className="btn btn-sm btn-outline-secondary">Edit</Link>
                                         </div>
-                                        <div className="btn-group mr-2">
-                                            <button className="btn btn-sm btn-outline-secondary" onClick={() => handleDelete(user.id)}>Delete</button>
-                                        </div>
+                                        {!isCurrentUserCreator && (
+                                            <div className="btn-group mr-2">
+                                                <button className="btn btn-sm btn-outline-secondary" onClick={() => handleDelete(user.id)}>Delete</button>
+                                            </div>
+                                        )}
                                     </td>
                                 </tr>
                             );

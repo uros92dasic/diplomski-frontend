@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Product } from "../../models/product";
 import axios from "axios";
 import Paginator from "../../components/Paginator";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/reducers";
 
 interface Props {
     show: boolean;
@@ -10,6 +12,9 @@ interface Props {
 }
 
 const SelectProductModal: React.FC<Props> = ({ show, onHide, onSelect }) => {
+    const currentUser = useSelector((state: RootState) => state.user.user);
+    const currentUserId = currentUser?.id;
+
     const [products, setProducts] = useState<Product[]>([]);
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(0);
@@ -17,10 +22,14 @@ const SelectProductModal: React.FC<Props> = ({ show, onHide, onSelect }) => {
     useEffect(() => {
         (async () => {
             const { data } = await axios.get(`products?page=${page}`);
-            setProducts(data.data);
+            const filteredProducts = data.data.filter(
+                (product: Product) => product.userId !== currentUserId
+            );
+            console.log("fltrd:", filteredProducts)
+            setProducts(filteredProducts);
             setLastPage(data.meta.lastPage);
         })();
-    }, [page]);
+    }, [page, currentUserId]);
 
     return (
         <div

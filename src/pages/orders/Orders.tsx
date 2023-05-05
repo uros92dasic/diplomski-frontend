@@ -6,8 +6,13 @@ import { OrderItem } from '../../models/orderItem';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import withPermission from '../../permissions/withPermission';
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/reducers";
 
 const Orders = () => {
+    const currentUser = useSelector((state: RootState) => state.user.user);
+    const currentUserId = currentUser?.id;
+
     const [orders, setOrders] = useState([]);
     const [selected, setSelected] = useState(0);
 
@@ -75,6 +80,7 @@ const Orders = () => {
                     </thead>
                     <tbody>
                         {orders.map((order: Order) => {
+                            const isCurrentUserCreator = order.userId === currentUserId;
                             return (
                                 <React.Fragment key={order.id}>
                                     <tr>
@@ -89,13 +95,17 @@ const Orders = () => {
                                                 View
                                             </button>
 
-                                            <div className="btn-group mr-2">
-                                                <Link to={`/orders/export/${order.id}`} className="btn btn-sm btn-outline-secondary">Export</Link>
-                                            </div>
+                                            {isCurrentUserCreator && (
+                                                <>
+                                                    <div className="btn-group mr-2">
+                                                        <Link to={`/orders/export/${order.id}`} className="btn btn-sm btn-outline-secondary">Export</Link>
+                                                    </div>
 
-                                            <div className="btn-group mr-2">
-                                                <button className="btn btn-sm btn-outline-secondary" onClick={() => handleDelete(order.id)}>Delete</button>
-                                            </div>
+                                                    <div className="btn-group mr-2">
+                                                        <button className="btn btn-sm btn-outline-secondary" onClick={() => handleDelete(order.id)}>Delete</button>
+                                                    </div>
+                                                </>
+                                            )}
                                         </td>
                                     </tr>
                                     <tr

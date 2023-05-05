@@ -5,8 +5,13 @@ import Paginator from "../../components/Paginator";
 import Wrapper from "../../components/Wrapper";
 import { Product } from "../../models/product";
 import withPermission from "../../permissions/withPermission";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/reducers";
 
 const Products = () => {
+    const currentUser = useSelector((state: RootState) => state.user.user);
+    const currentUserId = currentUser?.id;
+
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(0);
@@ -50,6 +55,7 @@ const Products = () => {
                     </thead>
                     <tbody>
                         {products.map((product: Product) => {
+                            const isCurrentUserCreator = product.userId === currentUserId;
                             return (
                                 <tr key={product.id}>
                                     <td>{product.id}</td>
@@ -58,16 +64,21 @@ const Products = () => {
                                     <td>{product.description}</td>
                                     <td>{product.price}</td>
                                     <td>
-                                        <div className="btn-group mr-2">
-                                            <Link to={`/products/${product.id}/edit`} className="btn btn-sm btn-outline-secondary">Edit</Link>
-                                        </div>
-                                        <div className="btn-group mr-2">
-                                            <button className="btn btn-sm btn-outline-secondary" onClick={() => handleDelete(product.id)}>Delete</button>
-                                        </div>
+                                        {isCurrentUserCreator && (
+                                            <>
+                                                <div className="btn-group mr-2">
+                                                    <Link to={`/products/${product.id}/edit`} className="btn btn-sm btn-outline-secondary">Edit</Link>
+                                                </div>
+                                                <div className="btn-group mr-2">
+                                                    <button className="btn btn-sm btn-outline-secondary" onClick={() => handleDelete(product.id)}>Delete</button>
+                                                </div>
+                                            </>
+                                        )}
                                     </td>
                                 </tr>
                             );
                         })}
+
                     </tbody>
                 </table>
             </div>

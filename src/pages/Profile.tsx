@@ -16,6 +16,8 @@ const Profile = () => {
     const [passwordConfirm, setPasswordConfirm] = useState("");
     const [loading, setLoading] = useState(true);
 
+    const [isFormValid, setIsFormValid] = useState(false);
+
     useEffect(() => {
         (async () => {
             if (!user.email) {
@@ -34,6 +36,13 @@ const Profile = () => {
         })();
     }, [dispatch]);
 
+    useEffect(() => {
+        checkFormValidity();
+    }, [password, passwordConfirm]);
+
+    const checkFormValidity = () => {
+        setIsFormValid(password.trim() !== "" && passwordConfirm.trim() !== "" && password === passwordConfirm);
+    };
 
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -104,7 +113,7 @@ const Profile = () => {
                             />
                         </div>
 
-                        <button className="btn btn-outline-secondary">Save</button>
+                        <button className="btn btn-outline-secondary" disabled={!isFormValid}>Save</button>
                     </form></>
             )}
         </Wrapper>

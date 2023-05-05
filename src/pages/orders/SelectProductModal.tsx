@@ -19,14 +19,22 @@ const SelectProductModal: React.FC<Props> = ({ show, onHide, onSelect }) => {
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(0);
 
+    // useEffect(() => {
+    //     (async () => {
+    //         const { data } = await axios.get(`products?page=${page}`);
+    //         const filteredProducts = data.data.filter(
+    //             (product: Product) => product.userId !== currentUserId
+    //         );
+    //         console.log("fltrd:", filteredProducts)
+    //         setProducts(filteredProducts);
+    //         setLastPage(data.meta.lastPage);
+    //     })();
+    // }, [page, currentUserId]);
+
     useEffect(() => {
         (async () => {
-            const { data } = await axios.get(`products?page=${page}`);
-            const filteredProducts = data.data.filter(
-                (product: Product) => product.userId !== currentUserId
-            );
-            console.log("fltrd:", filteredProducts)
-            setProducts(filteredProducts);
+            const { data } = await axios.get(`products/orders?page=${page}&userId=${currentUserId}`);
+            setProducts(data.data);
             setLastPage(data.meta.lastPage);
         })();
     }, [page, currentUserId]);

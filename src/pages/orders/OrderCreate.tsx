@@ -103,17 +103,17 @@ const OrderCreate = () => {
                 />
                 <button
                     type="button"
-                    className="btn btn-outline-secondary mb-3"
+                    className="btn btn-outline-secondary"
                     onClick={() => setShowProductModal(true)}
                 >
                     Select Product
                 </button>
                 {products.map((product, index) => (
-                    <div key={index} className="mb-3">
+                    <div key={index} className="mt-3 mb-3">
                         <img src={product.product.image} alt={`product-${product.product.id}`} width="100" />
                         <h5>{product.product.title}</h5>
                         <p>{product.product.description}</p>
-                        <div className="d-flex align-items-center">
+                        <div className="d-flex align-items-center mb-3">
                             <label className="me-2">Quantity</label>
                             <input
                                 type="number"

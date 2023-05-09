@@ -1,11 +1,15 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import React, { SyntheticEvent, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import Wrapper from "../../components/Wrapper";
 import { Role } from "../../models/role";
 import withPermission from "../../permissions/withPermission";
+import { useDispatch } from "react-redux";
+import { isErrorResponse, showErrorMessage, showSuccessMessage } from "../../components/messages/Messages";
 
 const UserCreate = () => {
+    const dispatch = useDispatch();
+
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -26,14 +30,25 @@ const UserCreate = () => {
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        await axios.post('users', {
-            firstName,
-            lastName,
-            email,
-            roleId
-        });
+        try {
+            await axios.post('users', {
+                firstName,
+                lastName,
+                email,
+                roleId
+            });
 
-        setRedirect(true);
+            setRedirect(true);
+            dispatch(showSuccessMessage("User created successfully."));
+        } catch (error) {
+            const axiosError = error as AxiosError;
+
+            if (axiosError.response && axiosError.response.data && isErrorResponse(axiosError.response.data)) {
+                dispatch(showErrorMessage(axiosError.response.data.message));
+            } else {
+                dispatch(showErrorMessage("Error while creating user"));
+            }
+        }
     }
 
     if (redirect) {

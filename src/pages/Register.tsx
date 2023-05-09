@@ -1,17 +1,27 @@
 import React, { Component, SyntheticEvent } from 'react';
 import { Navigate } from 'react-router-dom';
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import '../Login.css';
 import { Link } from 'react-router-dom';
+import { connect, ConnectedProps } from "react-redux";
+import { isErrorResponse, showErrorMessage, showSuccessMessage } from "../components/messages/Messages";
 
-//the only example of class components in the project
-class Register extends Component {
+const mapDispatchToProps = {
+    showSuccessMessage,
+    showErrorMessage
+};
+
+const connector = connect(null, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+class Register extends Component<PropsFromRedux> {
     firstName = '';
     lastName = '';
     email = '';
     password = '';
     passwordConfirm = '';
-    roleId = 1;
+    roleId = 4;
     state = {
         redirect: false
     };
@@ -19,19 +29,35 @@ class Register extends Component {
     submit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        await axios.post('register', {
-            firstName: this.lastName,
-            lastName: this.lastName,
-            email: this.email,
-            password: this.password,
-            passwordConfirm: this.passwordConfirm,
-            roleId: 1
-        });
+        try {
+            await axios.post('register', {
+                firstName: this.firstName,
+                lastName: this.lastName,
+                email: this.email,
+                password: this.password,
+                passwordConfirm: this.passwordConfirm,
+                roleId: 4
+            });
 
-        this.setState({
-            redirect: true
-        });
+            this.props.showSuccessMessage("Registration successful! You can now login.");
+            this.setState({
+                redirect: true
+            });
+        } catch (error) {
+            const axiosError = error as AxiosError;
+
+            if (
+                axiosError.response &&
+                axiosError.response.data &&
+                isErrorResponse(axiosError.response.data)
+            ) {
+                this.props.showErrorMessage(axiosError.response.data.message);
+            } else {
+                this.props.showErrorMessage("Error while creating user.");
+            }
+        }
     }
+
 
     render() {
         if (this.state.redirect) {
@@ -71,4 +97,4 @@ class Register extends Component {
     }
 }
 
-export default Register;
+export default connector(Register);

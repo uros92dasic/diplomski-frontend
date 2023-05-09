@@ -5,8 +5,12 @@ import Wrapper from "../../components/Wrapper";
 import { Permission } from "../../models/permission";
 import { RolePermission } from "../../models/rolePermission";
 import withPermission from "../../permissions/withPermission";
+import { useDispatch } from "react-redux";
+import { showErrorMessage, showSuccessMessage } from "../../components/messages/Messages";
 
 const RoleEdit = () => {
+    const dispatch = useDispatch();
+
     const [name, setName] = useState('');
     const [permissions, setPermissions] = useState([]);
     const [selected, setSelected] = useState([] as number[]);
@@ -40,12 +44,17 @@ const RoleEdit = () => {
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        await axios.patch(`roles/${id}`, {
-            name,
-            permissions: selected
-        });
+        try {
+            await axios.patch(`roles/${id}`, {
+                name,
+                permissions: selected
+            });
 
-        setRedirect(true);
+            setRedirect(true);
+            dispatch(showSuccessMessage("Role updated successfully."));
+        } catch (error) {
+            dispatch(showErrorMessage("Error while updating role."));
+        }
     }
 
     if (redirect) {

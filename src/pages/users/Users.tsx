@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Paginator from "../../components/Paginator";
@@ -7,33 +7,55 @@ import { User } from "../../models/user";
 import withPermission from "../../permissions/withPermission";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
+import { useDispatch } from "react-redux";
+import { isErrorResponse, showErrorMessage, showSuccessMessage } from "../../components/messages/Messages";
 
 const Users = () => {
     const currentUser = useSelector((state: RootState) => state.user.user);
     const currentUserId = currentUser?.id;
+
+    const dispatch = useDispatch();
 
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(0);
 
     useEffect(() => {
-        (
-            async () => {
+        (async () => {
+            try {
                 const { data } = await axios.get(`users?page=${page}`);
-
                 setUsers(data.data); //data.data because they are paginated
                 setLastPage(data.meta.lastPage);
+            } catch (error) {
+                const axiosError = error as AxiosError;
+
+                if (axiosError.response && axiosError.response.data && isErrorResponse(axiosError.response.data)) {
+                    dispatch(showErrorMessage(axiosError.response.data.message));
+                } else {
+                    dispatch(showErrorMessage("Error while fetching users."));
+                }
             }
-        )();
-    }, [page])
+        })();
+    }, [page, dispatch]);
 
     const handleDelete = async (id: number) => {
-        if (window.confirm('Are you sure you want to delete this record?')) {
-            await axios.delete(`users/${id}`);
+        if (window.confirm("Are you sure you want to delete this user?")) {
+            try {
+                await axios.delete(`users/${id}`);
+                setUsers(users.filter((u: User) => u.id !== id));
+                dispatch(showSuccessMessage("User deleted successfully."));
+            } catch (error) {
+                const axiosError = error as AxiosError;
 
-            setUsers(users.filter((u: User) => u.id !== id))
+                if (axiosError.response && axiosError.response.data && isErrorResponse(axiosError.response.data)) {
+                    dispatch(showErrorMessage(axiosError.response.data.message));
+                } else {
+                    dispatch(showErrorMessage("Error while deleting user."));
+                }
+            }
         }
-    }
+    };
+
 
     return (
         <Wrapper>

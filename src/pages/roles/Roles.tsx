@@ -6,10 +6,14 @@ import { Role } from "../../models/role";
 import withPermission from "../../permissions/withPermission";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
+import { useDispatch } from "react-redux";
+import { showErrorMessage, showSuccessMessage } from "../../components/messages/Messages";
 
 const Roles = () => {
     const currentUser = useSelector((state: RootState) => state.user.user);
     const currentUserRoleId = currentUser?.role.id;
+
+    const dispatch = useDispatch();
 
     const [roles, setRoles] = useState([]);
 
@@ -24,10 +28,14 @@ const Roles = () => {
     }, []);
 
     const handleDelete = async (id: number) => {
-        if (window.confirm('Are you sure you want to delete this record?')) {
-            await axios.delete(`roles/${id}`);
-
-            setRoles(roles.filter((r: Role) => r.id !== id))
+        if (window.confirm('Are you sure you want to delete this role?')) {
+            try {
+                await axios.delete(`roles/${id}`);
+                setRoles(roles.filter((r: Role) => r.id !== id))
+                dispatch(showSuccessMessage("Role deleted successfully."));
+            } catch (error) {
+                dispatch(showErrorMessage("Error while deleting role."));
+            }
         }
     }
 

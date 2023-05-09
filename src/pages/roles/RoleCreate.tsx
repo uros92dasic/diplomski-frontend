@@ -4,8 +4,12 @@ import { Navigate } from "react-router-dom";
 import Wrapper from "../../components/Wrapper";
 import { Permission } from "../../models/permission";
 import withPermission from "../../permissions/withPermission";
+import { showErrorMessage, showSuccessMessage } from "../../components/messages/Messages";
+import { useDispatch } from "react-redux";
 
 const RoleCreate = () => {
+    const dispatch = useDispatch();
+
     const [name, setName] = useState('');
     const [permissions, setPermissions] = useState([]);
     const [selected, setSelected] = useState([] as number[]);
@@ -32,12 +36,17 @@ const RoleCreate = () => {
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        await axios.post('roles', {
-            name,
-            permissions: selected
-        });
+        try {
+            await axios.post('roles', {
+                name,
+                permissions: selected
+            });
 
-        setRedirect(true);
+            setRedirect(true);
+            dispatch(showSuccessMessage("Role created successfully."));
+        } catch (error) {
+            dispatch(showErrorMessage("Error while creating role."));
+        }
     }
 
     if (redirect) {

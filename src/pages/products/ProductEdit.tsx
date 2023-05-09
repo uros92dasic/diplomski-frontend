@@ -4,8 +4,9 @@ import { Navigate, useParams } from "react-router-dom";
 import ImageUpload from "../../components/ImageUpload";
 import Wrapper from "../../components/Wrapper";
 import withPermission from "../../permissions/withPermission";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/reducers";
+import { showErrorMessage, showSuccessMessage } from "../../components/messages/Messages";
 
 const ProductEdit = () => {
     const currentUser = useSelector((state: RootState) => state.user.user);
@@ -19,6 +20,7 @@ const ProductEdit = () => {
     const [redirect, setRedirect] = useState(false);
     const { id } = useParams();
     const ref = useRef<HTMLInputElement>(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         (
@@ -40,14 +42,19 @@ const ProductEdit = () => {
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        await axios.patch(`products/${id}`, {
-            image,
-            title,
-            description,
-            price
-        });
+        try {
+            await axios.patch(`products/${id}`, {
+                image,
+                title,
+                description,
+                price
+            });
 
-        setRedirect(true);
+            setRedirect(true);
+            dispatch(showSuccessMessage("Product updated successfully."));
+        } catch (error) {
+            dispatch(showErrorMessage("Error while updating product."));
+        }
     }
 
     const updateImage = (url: string) => {

@@ -8,10 +8,14 @@ import { Link } from 'react-router-dom';
 import withPermission from '../../permissions/withPermission';
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
+import { showErrorMessage, showSuccessMessage } from '../../components/messages/Messages';
+import { useDispatch } from 'react-redux';
 
 const Orders = () => {
     const currentUser = useSelector((state: RootState) => state.user.user);
     const currentUserId = currentUser?.id;
+
+    const dispatch = useDispatch();
 
     const [orders, setOrders] = useState([]);
     const [selected, setSelected] = useState(0);
@@ -44,23 +48,16 @@ const Orders = () => {
     };
 
     const handleDelete = async (id: number) => {
-        if (window.confirm("Are you sure you want to delete this record?")) {
+        if (window.confirm("Are you sure you want to delete this order?")) {
             try {
                 await axios.delete(`/orders/${id}`);
                 setOrders(orders.filter((o: Order) => o.id !== id));
+                dispatch(showSuccessMessage("Order deleted successfully."));
             } catch (error) {
-                if (error instanceof Error) {
-                    console.error('Error deleting order:', error.message);
-                    alert('An error occurred while deleting the order. Please try again later.');
-                } else {
-                    console.error('Error deleting order:', error);
-                    alert('An unknown error occurred while deleting the order. Please try again later.');
-                }
+                dispatch(showErrorMessage("Error while deleting order."));
             }
         }
     }
-
-
 
     return (
         <Wrapper>

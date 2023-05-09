@@ -1,9 +1,10 @@
 import React, { SyntheticEvent, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Wrapper from "../components/Wrapper";
 import { User } from "../models/user";
 import { setUser } from "../redux/actions/setUserAction";
+import { isErrorResponse, showErrorMessage, showSuccessMessage } from "../components/messages/Messages";
 
 const Profile = () => {
     const dispatch = useDispatch();
@@ -34,10 +35,12 @@ const Profile = () => {
             }
             setLoading(false);
         })();
+        // eslint-disable-next-line
     }, [dispatch]);
 
     useEffect(() => {
         checkFormValidity();
+        // eslint-disable-next-line
     }, [password, passwordConfirm]);
 
     const checkFormValidity = () => {
@@ -47,22 +50,46 @@ const Profile = () => {
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        const { data } = await axios.patch("users/info", {
-            firstName,
-            lastName,
-            email,
-        });
+        try {
+            const { data } = await axios.patch("users/info", {
+                firstName,
+                lastName,
+                email,
+            });
 
-        dispatch(setUser(data));
+            dispatch(setUser(data));
+            dispatch(showSuccessMessage("Info updated successfully."));
+        } catch (error) {
+            const axiosError = error as AxiosError;
+
+            if (axiosError.response && axiosError.response.data && isErrorResponse(axiosError.response.data)) {
+                dispatch(showErrorMessage(axiosError.response.data.message));
+            } else {
+                dispatch(showErrorMessage("Error while updating user info."));
+            }
+        }
     };
+
 
     const handlePassword = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        await axios.patch("users/password", {
-            password,
-            passwordConfirm,
-        });
+        try {
+            await axios.patch("users/password", {
+                password,
+                passwordConfirm,
+            });
+
+            dispatch(showSuccessMessage("Password updated successfully."));
+        } catch (error) {
+            const axiosError = error as AxiosError;
+
+            if (axiosError.response && axiosError.response.data && isErrorResponse(axiosError.response.data)) {
+                dispatch(showErrorMessage(axiosError.response.data.message));
+            } else {
+                dispatch(showErrorMessage("Error while updating user password."));
+            }
+        }
     };
 
     return (

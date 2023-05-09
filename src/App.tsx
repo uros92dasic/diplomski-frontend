@@ -19,6 +19,7 @@ import Orders from './pages/orders/Orders';
 import OrderCreate from './pages/orders/OrderCreate';
 import OrderExport from './pages/orders/OrderExport';
 import NotFound from './pages/NotFound';
+import Message from './components/messages/Message';
 
 function App() {
   return (
@@ -43,7 +44,7 @@ function App() {
           <Route path={"/orders/export/:orderId"} element={<OrderExport />} />
           <Route path={"*"} element={<NotFound />} />
         </Routes>
-
+        <Message />
       </BrowserRouter>
     </div>
   );

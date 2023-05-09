@@ -1,9 +1,12 @@
 import React, { SyntheticEvent, useState } from "react";
 import { Navigate } from "react-router-dom";
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Link } from "react-router-dom";
+import { isErrorResponse, showErrorMessage, showSuccessMessage } from "../components/messages/Messages";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
+    const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
@@ -11,12 +14,23 @@ const Login = () => {
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        await axios.post("login", {
-            email,
-            password,
-        });
+        try {
+            await axios.post("login", {
+                email,
+                password,
+            });
 
-        setRedirect(true);
+            dispatch(showSuccessMessage("Login successful."));
+            setRedirect(true);
+        } catch (error) {
+            const axiosError = error as AxiosError;
+
+            if (axiosError.response && axiosError.response.data && isErrorResponse(axiosError.response.data)) {
+                dispatch(showErrorMessage(axiosError.response.data.message));
+            } else {
+                dispatch(showErrorMessage("Error while trying to login."));
+            }
+        }
     }
 
     if (redirect) {
@@ -36,7 +50,7 @@ const Login = () => {
                     onChange={e => setPassword(e.target.value)}
                 />
 
-                <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+                <button className="w-100 btn btn-lg btn-primary" type="submit">Login</button>
                 <Link className="w-100 btn btn-lg btn-secondary mt-2" to="/register">Register</Link>
             </form>
         </main>

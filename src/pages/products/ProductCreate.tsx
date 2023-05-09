@@ -4,8 +4,17 @@ import { Navigate } from "react-router-dom";
 import ImageUpload from "../../components/ImageUpload";
 import Wrapper from "../../components/Wrapper";
 import withPermission from "../../permissions/withPermission";
+import { useDispatch } from "react-redux";
+import { showErrorMessage, showSuccessMessage } from "../../components/messages/Messages";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/reducers";
 
 const ProductCreate = () => {
+    const currentUser = useSelector((state: RootState) => state.user.user);
+    const currentUserId = currentUser?.id;
+
+    const dispatch = useDispatch();
+
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
@@ -15,15 +24,20 @@ const ProductCreate = () => {
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        await axios.post('products', {
-            image,
-            title,
-            description,
-            price,
-            userId: 1
-        });
+        try {
+            await axios.post('products', {
+                image,
+                title,
+                description,
+                price,
+                userId: currentUserId
+            });
 
-        setRedirect(true);
+            setRedirect(true);
+            dispatch(showSuccessMessage("Product created successfully."));
+        } catch (error) {
+            dispatch(showErrorMessage("Error while creating product."));
+        }
     }
 
     if (redirect) {

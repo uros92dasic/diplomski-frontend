@@ -7,10 +7,14 @@ import { Product } from "../../models/product";
 import withPermission from "../../permissions/withPermission";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
+import { showErrorMessage, showSuccessMessage } from "../../components/messages/Messages";
+import { useDispatch } from "react-redux";
 
 const Products = () => {
     const currentUser = useSelector((state: RootState) => state.user.user);
     const currentUserId = currentUser?.id;
+
+    const dispatch = useDispatch();
 
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
@@ -28,8 +32,14 @@ const Products = () => {
     }, [page]);
 
     const handleDelete = async (id: number) => {
-        if (window.confirm("Are you sure you want to delete this record?")) {
-            await axios.delete(`/products/${id}`);
+        if (window.confirm("Are you sure you want to delete this product?")) {
+            try {
+                await axios.delete(`/products/${id}`);
+                setProducts(products.filter((p: Product) => p.id !== id));
+                dispatch(showSuccessMessage("Product deleted successfully."));
+            } catch (error) {
+                dispatch(showErrorMessage("Error while deleting product."));
+            }
         }
 
         setProducts(products.filter((p: Product) => p.id !== id));

@@ -5,6 +5,7 @@ import '../Login.css';
 import { Link } from 'react-router-dom';
 import { connect, ConnectedProps } from "react-redux";
 import { isErrorResponse, showErrorMessage, showSuccessMessage } from "../components/messages/Messages";
+import { AuthContext } from '../context/AuthContext';
 
 const mapDispatchToProps = {
     showSuccessMessage,
@@ -58,43 +59,58 @@ class Register extends Component<PropsFromRedux> {
         }
     }
 
-
     render() {
-        if (this.state.redirect) {
-            return <Navigate replace to={'/login'} />;
-        }
-
         return (
-            <main className="form-signin w-100 m-auto">
-                <form onSubmit={this.submit}>
-                    <h1 className="h3 mb-3 fw-normal">Register</h1>
+            <AuthContext.Consumer>
+                {(auth) => {
+                    if (!auth) {
+                        throw new Error("Auth context is not provided.");
+                    }
 
-                    <input className="form-control" placeholder="First Name" required
-                        onChange={e => this.firstName = e.target.value}
-                    />
+                    const { isLoggedIn } = auth;
 
-                    <input className="form-control" placeholder="Last Name" required
-                        onChange={e => this.lastName = e.target.value}
-                    />
+                    if (isLoggedIn) {
+                        return <Navigate replace to="/" />;
+                    }
 
-                    <input type="email" className="form-control" placeholder="name@example.com" required
-                        onChange={e => this.email = e.target.value}
-                    />
+                    return (
+                        <main className="form-signin w-100 m-auto">
+                            <form onSubmit={this.submit}>
+                                <h1 className="h3 mb-3 fw-normal">Register</h1>
 
-                    <input type="password" className="form-control" placeholder="Password" required
-                        onChange={e => this.password = e.target.value}
-                    />
+                                <input className="form-control" placeholder="First Name" required
+                                    onChange={e => this.firstName = e.target.value}
+                                />
 
-                    <input type="password" className="form-control" placeholder="Password Confirm" required
-                        onChange={e => this.passwordConfirm = e.target.value}
-                    />
+                                <input className="form-control" placeholder="Last Name" required
+                                    onChange={e => this.lastName = e.target.value}
+                                />
 
-                    <button className="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
-                    <Link className="w-100 btn btn-lg btn-secondary mt-2" to="/login">Login</Link>
-                </form>
-            </main>
+                                <input type="email" className="form-control" placeholder="name@example.com" required
+                                    onChange={e => this.email = e.target.value}
+                                />
+
+                                <input type="password" className="form-control" placeholder="Password" required
+                                    onChange={e => this.password = e.target.value}
+                                />
+
+                                <input type="password" className="form-control" placeholder="Password Confirm" required
+                                    onChange={e => this.passwordConfirm = e.target.value}
+                                />
+
+                                <button className="w-100 btn btn-lg btn-primary" type="submit">Register</button>
+                                <Link className="w-100 btn btn-lg btn-secondary mt-2" to="/login">Login</Link>
+                            </form>
+                            <div className="mt-3 text-center">
+                                <Link to="/visitor-page" className="small-link">Visitor page</Link>
+                            </div>
+                        </main>
+                    );
+                }}
+            </AuthContext.Consumer>
         );
     }
+
 }
 
 export default connector(Register);

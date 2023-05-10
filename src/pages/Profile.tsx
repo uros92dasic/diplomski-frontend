@@ -114,13 +114,13 @@ const Profile = () => {
                                 onChange={e => setLastName(e.target.value)}
                             />
                         </div>
-                        <div className="mb-3">
+                        {/* <div className="mb-3">
                             <label>Email</label>
                             <input className="form-control"
                                 defaultValue={email}
                                 onChange={e => setEmail(e.target.value)}
                             />
-                        </div>
+                        </div> */}
 
                         <button className="btn btn-outline-secondary">Save</button>
                     </form>

@@ -67,7 +67,6 @@ const Users = () => {
                 <table className="table table-striped table-sm">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">Role</th>
@@ -79,14 +78,15 @@ const Users = () => {
                             const isCurrentUserCreator = user.id === currentUserId;
                             return (
                                 <tr key={user.id}>
-                                    <td>{user.id}</td>
                                     <td>{user.firstName} {user.lastName}</td>
                                     <td>{user.email}</td>
                                     <td>{user.role.name}</td>
                                     <td>
-                                        <div className="btn-group mr-2">
-                                            <Link to={`/users/${user.id}/edit`} className="btn btn-sm btn-outline-secondary">Edit</Link>
-                                        </div>
+                                        {!isCurrentUserCreator && (
+                                            <div className="btn-group mr-2">
+                                                <Link to={`/users/${user.id}/edit`} className="btn btn-sm btn-outline-secondary">Edit</Link>
+                                            </div>
+                                        )}
                                         {!isCurrentUserCreator && (
                                             <div className="btn-group mr-2">
                                                 <button className="btn btn-sm btn-outline-secondary" onClick={() => handleDelete(user.id)}>Delete</button>

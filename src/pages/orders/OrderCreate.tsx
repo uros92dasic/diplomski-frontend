@@ -120,6 +120,7 @@ const OrderCreate = () => {
                         <img src={product.product.image} alt={`product-${product.product.id}`} width="100" />
                         <h5>{product.product.title}</h5>
                         <p>{product.product.description}</p>
+                        <p>Price: {product.product.price}</p>
                         <div className="d-flex align-items-center mb-3">
                             <label className="me-2">Quantity</label>
                             <input

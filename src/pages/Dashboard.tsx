@@ -23,10 +23,10 @@ const Dashboard = () => {
                         x: {
                             type: 'timeseries',
                             tick: {
-                                format: '%Y-%m-%d'
+                                format: '%d. %B %Y.'
                             }
                         }
-                    }
+                    },
                 });
 
                 const { data } = await axios.get('orders/chart');

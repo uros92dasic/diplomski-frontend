@@ -55,7 +55,7 @@ const Products = () => {
                 <table className="table table-striped table-sm">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">User</th>
                             <th scope="col">image</th>
                             <th scope="col">Title</th>
                             <th scope="col">Description</th>
@@ -65,10 +65,10 @@ const Products = () => {
                     </thead>
                     <tbody>
                         {products.map((product: Product) => {
-                            const isCurrentUserCreator = product.userId === currentUserId;
+                            const isCurrentUserCreator = product?.user?.id === currentUserId;
                             return (
                                 <tr key={product.id}>
-                                    <td>{product.id}</td>
+                                    <td>{`${product?.user?.firstName} ${product?.user?.lastName}`}</td>
                                     <td><img alt={`product-${product.id}`} src={product.image} width="50" /></td>
                                     <td>{product.title}</td>
                                     <td>{product.description}</td>

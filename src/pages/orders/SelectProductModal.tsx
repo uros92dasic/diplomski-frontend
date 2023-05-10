@@ -55,7 +55,7 @@ const SelectProductModal: React.FC<Props> = ({ show, onHide, onSelect }) => {
                                     <img alt={`product-${product.id}`} src={product.image} width="50" />
                                     {product.title}
                                     <span className="badge bg-primary rounded-pill">
-                                        {product.id}
+                                        {product.price}
                                     </span>
                                 </li>
                             ))}

@@ -6,5 +6,6 @@ export interface Order {
     userId: number;
     user: User;
     total: number;
+    createdAt: string,
     orderItems: OrderItem[];
 }

@@ -8,10 +8,14 @@ import { Link } from 'react-router-dom';
 import withPermission from '../../permissions/withPermission';
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
+import { showErrorMessage, showSuccessMessage } from '../../components/messages/Messages';
+import { useDispatch } from 'react-redux';
 
 const Orders = () => {
     const currentUser = useSelector((state: RootState) => state.user.user);
     const currentUserId = currentUser?.id;
+
+    const dispatch = useDispatch();
 
     const [orders, setOrders] = useState([]);
     const [selected, setSelected] = useState(0);
@@ -44,23 +48,16 @@ const Orders = () => {
     };
 
     const handleDelete = async (id: number) => {
-        if (window.confirm("Are you sure you want to delete this record?")) {
+        if (window.confirm("Are you sure you want to delete this order?")) {
             try {
                 await axios.delete(`/orders/${id}`);
                 setOrders(orders.filter((o: Order) => o.id !== id));
+                dispatch(showSuccessMessage("Order deleted successfully."));
             } catch (error) {
-                if (error instanceof Error) {
-                    console.error('Error deleting order:', error.message);
-                    alert('An error occurred while deleting the order. Please try again later.');
-                } else {
-                    console.error('Error deleting order:', error);
-                    alert('An unknown error occurred while deleting the order. Please try again later.');
-                }
+                dispatch(showErrorMessage("Error while deleting order."));
             }
         }
     }
-
-
 
     return (
         <Wrapper>
@@ -72,8 +69,8 @@ const Orders = () => {
                 <table className="table table-striped table-sm">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Name</th>
+                            <th>User Name</th>
+                            <th>Created at</th>
                             <th>Total</th>
                             <th>Action</th>
                         </tr>
@@ -84,8 +81,8 @@ const Orders = () => {
                             return (
                                 <React.Fragment key={order.id}>
                                     <tr>
-                                        <td>{order.id}</td>
-                                        <td>{order.user.firstName}</td>
+                                        <td>{`${order.user.firstName} ${order.user.lastName}`}</td>
+                                        <td>{new Date(order.createdAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
                                         <td>{order.total}</td>
                                         <td>
                                             <button
@@ -116,7 +113,7 @@ const Orders = () => {
                                             <table className="table table-sm">
                                                 <thead>
                                                     <tr>
-                                                        <th>#</th>
+                                                        <th>User name</th>
                                                         <th>Product Title</th>
                                                         <th>Quantity</th>
                                                         <th>Price</th>
@@ -125,7 +122,7 @@ const Orders = () => {
                                                 <tbody>
                                                     {order.orderItems.map((item: OrderItem) => (
                                                         <tr key={item.id}>
-                                                            <td>{item.id}</td>
+                                                            <td>{`${item.product.user.firstName} ${item.product.user.lastName}`}</td>
                                                             <td>{item.product.title}</td>
                                                             <td>{item.quantity}</td>
                                                             <td>{item.product.price}</td>

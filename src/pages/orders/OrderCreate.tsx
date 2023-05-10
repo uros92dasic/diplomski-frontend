@@ -10,6 +10,7 @@ import SelectProductModal from "./SelectProductModal";
 import { Product } from "../../models/product";
 import { OrderItem } from "../../models/orderItem";
 import withPermission from "../../permissions/withPermission";
+import { showErrorMessage, showSuccessMessage } from "../../components/messages/Messages";
 
 interface OrderProduct extends Omit<OrderItem, "id" | "productId" | "quantity"> {
     productId: string;
@@ -17,10 +18,12 @@ interface OrderProduct extends Omit<OrderItem, "id" | "productId" | "quantity"> 
 }
 
 const OrderCreate = () => {
+    const user = useSelector((state: RootState) => state.user.user);
+
+    const dispatch = useDispatch();
+
     const [products, setProducts] = useState<OrderProduct[]>([]);
     const [redirect, setRedirect] = useState(false);
-    const dispatch = useDispatch();
-    const user = useSelector((state: RootState) => state.user.user);
 
     const [showProductModal, setShowProductModal] = useState(false);
 
@@ -63,12 +66,16 @@ const OrderCreate = () => {
             quantity: product.quantity,
         }));
 
-        await axios.post("orders", {
-            userId: user.id,
-            products: orderItems,
-        });
-
-        setRedirect(true);
+        try {
+            await axios.post("orders", {
+                userId: user.id,
+                products: orderItems,
+            });
+            setRedirect(true);
+            dispatch(showSuccessMessage("Order created successfully."));
+        } catch (error) {
+            dispatch(showErrorMessage("Error while creating order."));
+        }
     };
 
     const handleProductChange = (index: number, key: "productId" | "quantity", value: string) => {
@@ -113,6 +120,7 @@ const OrderCreate = () => {
                         <img src={product.product.image} alt={`product-${product.product.id}`} width="100" />
                         <h5>{product.product.title}</h5>
                         <p>{product.product.description}</p>
+                        <p>Price: {product.product.price}</p>
                         <div className="d-flex align-items-center mb-3">
                             <label className="me-2">Quantity</label>
                             <input

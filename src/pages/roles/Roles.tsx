@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Wrapper from "../../components/Wrapper";
@@ -6,10 +6,14 @@ import { Role } from "../../models/role";
 import withPermission from "../../permissions/withPermission";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
+import { useDispatch } from "react-redux";
+import { isErrorResponse, showErrorMessage, showSuccessMessage } from "../../components/messages/Messages";
 
 const Roles = () => {
     const currentUser = useSelector((state: RootState) => state.user.user);
     const currentUserRoleId = currentUser?.role.id;
+
+    const dispatch = useDispatch();
 
     const [roles, setRoles] = useState([]);
 
@@ -24,10 +28,20 @@ const Roles = () => {
     }, []);
 
     const handleDelete = async (id: number) => {
-        if (window.confirm('Are you sure you want to delete this record?')) {
-            await axios.delete(`roles/${id}`);
+        if (window.confirm('Are you sure you want to delete this role?')) {
+            try {
+                await axios.delete(`roles/${id}`);
+                setRoles(roles.filter((r: Role) => r.id !== id))
+                dispatch(showSuccessMessage("Role deleted successfully."));
+            } catch (error) {
+                const axiosError = error as AxiosError;
 
-            setRoles(roles.filter((r: Role) => r.id !== id))
+                if (axiosError.response && axiosError.response.data && isErrorResponse(axiosError.response.data)) {
+                    dispatch(showErrorMessage(axiosError.response.data.message));
+                } else {
+                    dispatch(showErrorMessage("Error while deleting user."));
+                }
+            }
         }
     }
 
@@ -41,7 +55,6 @@ const Roles = () => {
                 <table className="table table-striped table-sm">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Name</th>
                             <th scope="col">Action</th>
                         </tr>
@@ -51,12 +64,13 @@ const Roles = () => {
                             const isCurrentRoleCreator = role.id === currentUserRoleId;
                             return (
                                 <tr key={role.id}>
-                                    <td>{role.id}</td>
                                     <td>{role.name}</td>
                                     <td>
-                                        <div className="btn-group mr-2">
-                                            <Link to={`/roles/${role.id}/edit`} className="btn btn-sm btn-outline-secondary">Edit</Link>
-                                        </div>
+                                        {!isCurrentRoleCreator && (
+                                            <div className="btn-group mr-2">
+                                                <Link to={`/roles/${role.id}/edit`} className="btn btn-sm btn-outline-secondary">Edit</Link>
+                                            </div>
+                                        )}
                                         {!isCurrentRoleCreator && (
                                             <div className="btn-group mr-2">
                                                 <button className="btn btn-sm btn-outline-secondary" onClick={() => handleDelete(role.id)}>Delete</button>

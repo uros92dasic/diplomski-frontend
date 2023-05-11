@@ -5,8 +5,15 @@ import { Product } from "../models/product";
 import Paginator from "../components/Paginator";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/reducers";
+import { setSearchTerm } from "../redux/actions/setProductSearchAction";
 
 const VisitorPage = () => {
+    const dispatch = useDispatch();
+    const searchTerm = useSelector((state: RootState) => state.search.searchTerm);
+
     const auth = useAuth();
 
     const [products, setProducts] = useState([]);
@@ -29,13 +36,13 @@ const VisitorPage = () => {
     useEffect(() => {
         (
             async () => {
-                const { data } = await axios.get(`products?page=${page}`);
+                const { data } = await axios.get(`products?page=${page}&search=${searchTerm}`);
 
                 setProducts(data.data);
                 setLastPage(data.meta.lastPage);
             }
         )();
-    }, [page]);
+    }, [page, searchTerm]);
 
     return (
         <>
@@ -60,6 +67,9 @@ const VisitorPage = () => {
                         type="text"
                         placeholder="Search"
                         aria-label="Search"
+                        value={searchTerm}
+                        onChange={(e) => dispatch(setSearchTerm(e.target.value))}
+                        onBlur={(e) => e.target.value = searchTerm}
                     />
                     <div className="navbar-nav">
                         <div className="nav-item text-nowrap">

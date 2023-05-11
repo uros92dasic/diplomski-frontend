@@ -11,10 +11,11 @@ import { showErrorMessage, showSuccessMessage } from "../../components/messages/
 import { useDispatch } from "react-redux";
 
 const Products = () => {
+    const dispatch = useDispatch();
     const currentUser = useSelector((state: RootState) => state.user.user);
     const currentUserId = currentUser?.id;
 
-    const dispatch = useDispatch();
+    const searchTerm = useSelector((state: RootState) => state.search.searchTerm);
 
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
@@ -23,13 +24,13 @@ const Products = () => {
     useEffect(() => {
         (
             async () => {
-                const { data } = await axios.get(`products?page=${page}`);
+                const { data } = await axios.get(`products?page=${page}&search=${searchTerm}`);
 
                 setProducts(data.data);
                 setLastPage(data.meta.lastPage);
             }
         )();
-    }, [page]);
+    }, [page, searchTerm]);
 
     const handleDelete = async (id: number) => {
         if (window.confirm("Are you sure you want to delete this product?")) {
@@ -64,7 +65,7 @@ const Products = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((product: Product) => {
+                        {products && products.map((product: Product) => {
                             const isCurrentUserCreator = product?.user?.id === currentUserId;
                             return (
                                 <tr key={product.id}>

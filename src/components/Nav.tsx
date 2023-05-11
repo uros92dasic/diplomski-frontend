@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/reducers";
@@ -7,10 +7,12 @@ import { getUserName } from "../models/user";
 import { useDispatch } from "react-redux";
 import { clearUser } from "../redux/actions/setUserAction";
 import { useAuth } from "../context/AuthContext";
+import { setSearchTerm } from "../redux/actions/setProductSearchAction";
 
 const Nav = () => {
     const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.user.user);
+    const searchTerm = useSelector((state: RootState) => state.search.searchTerm);
 
     const auth = useAuth();
 
@@ -25,6 +27,11 @@ const Nav = () => {
         dispatch(clearUser());
         setIsLoggedIn(false);
     };
+
+    const location = useLocation();
+
+    const isVisitorPage = location.pathname === "/visitor-page";
+    const isProductsPage = location.pathname === "/products";
 
     return (
         <>
@@ -43,12 +50,16 @@ const Nav = () => {
                 >
                     <span className="navbar-toggler-icon"></span>
                 </button>
-                <input
-                    className="form-control form-control-dark w-100 rounded-0 border-0"
-                    type="text"
-                    placeholder="Search"
-                    aria-label="Search"
-                />
+                {(isVisitorPage || isProductsPage) && (
+                    <input
+                        className="form-control form-control-dark w-100 rounded-0 border-0"
+                        type="text"
+                        placeholder="Search"
+                        aria-label="Search"
+                        value={searchTerm}
+                        onChange={(e) => dispatch(setSearchTerm(e.target.value))}
+                    />
+                )}
                 <div className="navbar-nav">
                     <div className="nav-item text-nowrap">
                         <Link to="/profile" className="nav-link px-3 text-decoration-none">

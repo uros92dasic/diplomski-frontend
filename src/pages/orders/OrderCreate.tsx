@@ -61,10 +61,22 @@ const OrderCreate = () => {
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
+        if (products.length === 0) {
+            dispatch(showErrorMessage("Cannot create an empty order."));
+            return;
+        }
+
         const orderItems = products.map((product) => ({
             productId: product.productId,
             quantity: product.quantity,
         }));
+
+        const hasZeroQuantity = orderItems.some((item) => parseInt(item.quantity) === 0);
+
+        if (hasZeroQuantity) {
+            dispatch(showErrorMessage("Product quantity must be greater than 0."));
+            return;
+        }
 
         try {
             await axios.post("orders", {

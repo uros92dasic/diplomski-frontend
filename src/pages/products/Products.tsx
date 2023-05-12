@@ -21,16 +21,23 @@ const Products = () => {
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(0);
 
+    const [showOnlyMyProducts, setShowOnlyMyProducts] = useState(false);
+
+    const toggleShowOnlyMyProducts = () => {
+        setShowOnlyMyProducts(!showOnlyMyProducts);
+    };
+
     useEffect(() => {
         (
             async () => {
-                const { data } = await axios.get(`products?page=${page}&search=${searchTerm}`);
+                const { data } = await axios.get(`products?page=${page}&search=${searchTerm}` + (showOnlyMyProducts ? `&userId=${+currentUserId}` : ''));
 
                 setProducts(data.data);
                 setLastPage(data.meta.lastPage);
             }
         )();
-    }, [page, searchTerm]);
+    }, [page, searchTerm, showOnlyMyProducts, currentUserId]);
+
 
     const handleDelete = async (id: number) => {
         if (window.confirm("Are you sure you want to delete this product?")) {
@@ -50,6 +57,18 @@ const Products = () => {
         <Wrapper>
             <div className="pt-3 pb-2 mb-3 border-bottom">
                 <Link to={'/products/create'} className="btn btn-sm btn-outline-secondary">Add</Link>
+                <div className="form-check form-switch pt-3">
+                    <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="showOnlyMyProducts"
+                        checked={showOnlyMyProducts}
+                        onChange={toggleShowOnlyMyProducts}
+                    />
+                    <label className="form-check-label" htmlFor="showOnlyMyProducts">
+                        Show only my products
+                    </label>
+                </div>
             </div>
 
             <div className="table-responsive">

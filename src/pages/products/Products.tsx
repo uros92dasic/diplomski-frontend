@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { CSSProperties, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Paginator from "../../components/Paginator";
 import Wrapper from "../../components/Wrapper";
@@ -9,6 +9,22 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
 import { showErrorMessage, showSuccessMessage } from "../../components/messages/Messages";
 import { useDispatch } from "react-redux";
+
+const tableStyles = {
+    counterColumnWidth: "5%",
+    userColumnWidth: "15%",
+    imageColumnWidth: "12%",
+    titleColumnWidth: "15%",
+    descriptionColumnWidth: "30%",
+    priceColumnWidth: "8%",
+    actionColumnWidth: "15%",
+};
+
+const imageStyles: CSSProperties = {
+    width: '55px',
+    height: '55px',
+    objectFit: 'fill' as 'fill',
+};
 
 const Products = () => {
     const dispatch = useDispatch();
@@ -25,6 +41,7 @@ const Products = () => {
 
     const toggleShowOnlyMyProducts = () => {
         setShowOnlyMyProducts(!showOnlyMyProducts);
+        setPage(1)
     };
 
     useEffect(() => {
@@ -80,13 +97,13 @@ const Products = () => {
                 <table className="table table-striped table-sm">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">User</th>
-                            <th scope="col">Image</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Action</th>
+                            <th style={{ width: tableStyles.counterColumnWidth }}>#</th>
+                            <th style={{ width: tableStyles.userColumnWidth }}>User</th>
+                            <th style={{ width: tableStyles.imageColumnWidth }}>Image</th>
+                            <th style={{ width: tableStyles.titleColumnWidth }}>Title</th>
+                            <th style={{ width: tableStyles.descriptionColumnWidth }}>Description</th>
+                            <th style={{ width: tableStyles.priceColumnWidth }}>Price</th>
+                            <th style={{ width: tableStyles.actionColumnWidth }}>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -96,7 +113,13 @@ const Products = () => {
                                 <tr key={product.id}>
                                     <td>{counter + index}</td>
                                     <td>{`${product?.user?.firstName} ${product?.user?.lastName}`}</td>
-                                    <td><img alt={`product-${product.id}`} src={product.image} width="50" /></td>
+                                    <td>
+                                        <img
+                                            alt={`product-${product.id}`}
+                                            src={product.image}
+                                            style={imageStyles}
+                                        />
+                                    </td>
                                     <td>{product.title}</td>
                                     <td>{product.description}</td>
                                     <td>{product.price}</td>

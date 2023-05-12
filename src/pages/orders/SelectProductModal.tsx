@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { CSSProperties, useEffect, useState } from "react";
 import { Product } from "../../models/product";
 import axios from "axios";
 import Paginator from "../../components/Paginator";
@@ -6,6 +6,19 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
 import { useDispatch } from "react-redux";
 import { setSearchTerm } from "../../redux/actions/setProductSearchAction";
+
+const tableStyles = {
+    counterColumnWidth: "5%",
+    imageColumnWidth: "25%",
+    titleColumnWidth: "45%",
+    priceColumnWidth: "15%",
+};
+
+const imageStyles: CSSProperties = {
+    width: '50px',
+    height: '50px',
+    objectFit: 'fill' as 'fill',
+};
 
 interface Props {
     show: boolean;
@@ -78,10 +91,10 @@ const SelectProductModal: React.FC<Props> = ({ show, onHide, onSelect }) => {
                         <table className="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Image</th>
-                                    <th>Title</th>
-                                    <th>Price</th>
+                                    <th style={{ width: tableStyles.counterColumnWidth }}>#</th>
+                                    <th style={{ width: tableStyles.imageColumnWidth }}>Image</th>
+                                    <th style={{ width: tableStyles.titleColumnWidth }}>Title</th>
+                                    <th style={{ width: tableStyles.priceColumnWidth }}>Price</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -92,7 +105,11 @@ const SelectProductModal: React.FC<Props> = ({ show, onHide, onSelect }) => {
                                         style={{ cursor: "pointer" }}
                                     >
                                         <td>{counter + index}</td>
-                                        <td><img alt={`product-${product.id}`} src={product.image} width="50" /></td>
+                                        <td><img
+                                            alt={`product-${product.id}`}
+                                            src={product.image}
+                                            style={imageStyles}
+                                        /></td>
                                         <td>{product.title}</td>
                                         <td>{product.price}</td>
                                     </tr>

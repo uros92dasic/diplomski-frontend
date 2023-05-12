@@ -10,6 +10,14 @@ import { RootState } from "../../redux/reducers";
 import { useDispatch } from "react-redux";
 import { isErrorResponse, showErrorMessage, showSuccessMessage } from "../../components/messages/Messages";
 
+const tableStyles = {
+    counterColumnWidth: "5%",
+    nameColumnWidth: "25%",
+    emailColumnWidth: "25%",
+    roleColumnWidth: "25%",
+    actionColumnWidth: "20%",
+};
+
 const Users = () => {
     const currentUser = useSelector((state: RootState) => state.user.user);
     const currentUserId = currentUser?.id;
@@ -68,11 +76,21 @@ const Users = () => {
                 <table className="table table-striped table-sm">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Role</th>
-                            <th scope="col">Action</th>
+                            <th scope="col" style={{ width: tableStyles.counterColumnWidth }}>
+                                #
+                            </th>
+                            <th scope="col" style={{ width: tableStyles.nameColumnWidth }}>
+                                Name
+                            </th>
+                            <th scope="col" style={{ width: tableStyles.emailColumnWidth }}>
+                                Email
+                            </th>
+                            <th scope="col" style={{ width: tableStyles.roleColumnWidth }}>
+                                Role
+                            </th>
+                            <th scope="col" style={{ width: tableStyles.actionColumnWidth }}>
+                                Action
+                            </th>
                         </tr>
                     </thead>
                     <tbody>

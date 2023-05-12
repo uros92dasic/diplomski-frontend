@@ -9,6 +9,12 @@ import { RootState } from "../../redux/reducers";
 import { useDispatch } from "react-redux";
 import { isErrorResponse, showErrorMessage, showSuccessMessage } from "../../components/messages/Messages";
 
+const tableStyles = {
+    counterColumnWidth: "5%",
+    nameColumnWidth: "75%",
+    actionColumnWidth: "20%",
+};
+
 const Roles = () => {
     const currentUser = useSelector((state: RootState) => state.user.user);
     const currentUserRoleId = currentUser?.role.id;
@@ -55,9 +61,15 @@ const Roles = () => {
                 <table className="table table-striped table-sm">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Action</th>
+                            <th scope="col" style={{ width: tableStyles.counterColumnWidth }}>
+                                #
+                            </th>
+                            <th scope="col" style={{ width: tableStyles.nameColumnWidth }}>
+                                Name
+                            </th>
+                            <th scope="col" style={{ width: tableStyles.actionColumnWidth }}>
+                                Action
+                            </th>
                         </tr>
                     </thead>
                     <tbody>

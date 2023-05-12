@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { CSSProperties, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { Product } from "../models/product";
@@ -9,6 +9,21 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/reducers";
 import { setSearchTerm } from "../redux/actions/setProductSearchAction";
+
+
+const tableStyles = {
+    counterColumnWidth: "5%",
+    imageColumnWidth: "20%",
+    titleColumnWidth: "25%",
+    descriptionColumnWidth: "40%",
+    priceColumnWidth: "10%",
+};
+
+const imageStyles: CSSProperties = {
+    width: '55px',
+    height: '55px',
+    objectFit: 'fill' as 'fill',
+};
 
 const VisitorPage = () => {
     const dispatch = useDispatch();
@@ -107,11 +122,11 @@ const VisitorPage = () => {
                             <table className="table table-striped table-sm">
                                 <thead>
                                     <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Image</th>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Price</th>
+                                        <th style={{ width: tableStyles.counterColumnWidth }}>#</th>
+                                        <th style={{ width: tableStyles.imageColumnWidth }}>Image</th>
+                                        <th style={{ width: tableStyles.titleColumnWidth }}>Title</th>
+                                        <th style={{ width: tableStyles.descriptionColumnWidth }}>Description</th>
+                                        <th style={{ width: tableStyles.priceColumnWidth }}>Price</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -119,7 +134,11 @@ const VisitorPage = () => {
                                         return (
                                             <tr key={product.id}>
                                                 <td>{counter + index}</td>
-                                                <td><img alt={`product-${product.id}`} src={product.image} width="50" /></td>
+                                                <td><img
+                                                    alt={`product-${product.id}`}
+                                                    src={product.image}
+                                                    style={imageStyles}
+                                                /></td>
                                                 <td>{product.title}</td>
                                                 <td>{product.description}</td>
                                                 <td>{product.price}</td>

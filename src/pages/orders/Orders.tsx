@@ -11,6 +11,22 @@ import { RootState } from "../../redux/reducers";
 import { showErrorMessage, showSuccessMessage } from '../../components/messages/Messages';
 import { useDispatch } from 'react-redux';
 
+const tableStyles = {
+    counterColumnWidth: "5%",
+    createdAtColumnWidth: "25%",
+    totalColumnWidth: "25%",
+    actionColumnWidth: "30%",
+    userNameColumnWidth: "15%",
+};
+
+const innerStyles = {
+    counterColumnWidth: "5%",
+    sellerColumnWidth: "25%",
+    productTitleColumnWidth: "25%",
+    quantityColumnWidth: "20%",
+    priceColumnWidth: "25%",
+};
+
 const Orders = () => {
     const currentUser = useSelector((state: RootState) => state.user.user);
     const currentUserId = currentUser?.id;
@@ -71,11 +87,11 @@ const Orders = () => {
                 <table className="table table-striped table-sm">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Created at</th>
-                            <th>Total</th>
-                            <th>Action</th>
-                            <th>User Name</th>
+                            <th style={{ width: tableStyles.counterColumnWidth }}>#</th>
+                            <th style={{ width: tableStyles.createdAtColumnWidth }}>Created at</th>
+                            <th style={{ width: tableStyles.totalColumnWidth }}>Total</th>
+                            <th style={{ width: tableStyles.actionColumnWidth }}>Action</th>
+                            <th style={{ width: tableStyles.userNameColumnWidth }}>User Name</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -117,15 +133,17 @@ const Orders = () => {
                                             <table className="table table-sm">
                                                 <thead>
                                                     <tr>
-                                                        <th>User name</th>
-                                                        <th>Product Title</th>
-                                                        <th>Quantity</th>
-                                                        <th>Price</th>
+                                                        <th style={{ width: innerStyles.counterColumnWidth }}>#</th>
+                                                        <th style={{ width: innerStyles.sellerColumnWidth }}>Seller</th>
+                                                        <th style={{ width: innerStyles.productTitleColumnWidth }}>Product Title</th>
+                                                        <th style={{ width: innerStyles.quantityColumnWidth }}>Quantity</th>
+                                                        <th style={{ width: innerStyles.priceColumnWidth }}>Price</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {order.orderItems.map((item: OrderItem) => (
+                                                    {order.orderItems.map((item: OrderItem, index: number) => (
                                                         <tr key={item.id}>
+                                                            <td>{index + 1}</td>
                                                             <td>{`${item.product.user.firstName} ${item.product.user.lastName}`}</td>
                                                             <td>{item.product.title}</td>
                                                             <td>{item.quantity}</td>

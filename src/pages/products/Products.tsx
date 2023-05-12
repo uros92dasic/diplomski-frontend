@@ -38,6 +38,9 @@ const Products = () => {
         )();
     }, [page, searchTerm, showOnlyMyProducts, currentUserId]);
 
+    useEffect(() => {
+        setPage(1);
+    }, [searchTerm]);
 
     const handleDelete = async (id: number) => {
         if (window.confirm("Are you sure you want to delete this product?")) {
@@ -52,6 +55,8 @@ const Products = () => {
 
         setProducts(products.filter((p: Product) => p.id !== id));
     }
+
+    const counter = (page - 1) * 10 + 1;
 
     return (
         <Wrapper>
@@ -75,8 +80,9 @@ const Products = () => {
                 <table className="table table-striped table-sm">
                     <thead>
                         <tr>
+                            <th scope="col">#</th>
                             <th scope="col">User</th>
-                            <th scope="col">image</th>
+                            <th scope="col">Image</th>
                             <th scope="col">Title</th>
                             <th scope="col">Description</th>
                             <th scope="col">Price</th>
@@ -84,10 +90,11 @@ const Products = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products && products.map((product: Product) => {
+                        {products && products.map((product: Product, index: number) => {
                             const isCurrentUserCreator = product?.user?.id === currentUserId;
                             return (
                                 <tr key={product.id}>
+                                    <td>{counter + index}</td>
                                     <td>{`${product?.user?.firstName} ${product?.user?.lastName}`}</td>
                                     <td><img alt={`product-${product.id}`} src={product.image} width="50" /></td>
                                     <td>{product.title}</td>

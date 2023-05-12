@@ -59,6 +59,8 @@ const Orders = () => {
         }
     }
 
+    const counter = (page - 1) * 10 + 1;
+
     return (
         <Wrapper>
             <div className="pt-3 pb-2 mb-3 border-bottom">
@@ -69,19 +71,20 @@ const Orders = () => {
                 <table className="table table-striped table-sm">
                     <thead>
                         <tr>
-                            <th>User Name</th>
+                            <th>#</th>
                             <th>Created at</th>
                             <th>Total</th>
                             <th>Action</th>
+                            <th>User Name</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {orders.map((order: Order) => {
+                        {orders.map((order: Order, index: number) => {
                             const isCurrentUserCreator = order.userId === currentUserId;
                             return (
                                 <React.Fragment key={order.id}>
                                     <tr>
-                                        <td>{`${order.user.firstName} ${order.user.lastName}`}</td>
+                                        <td>{counter + index}</td>
                                         <td>{new Date(order.createdAt).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
                                         <td>{order.total}</td>
                                         <td>
@@ -104,6 +107,7 @@ const Orders = () => {
                                                 </>
                                             )}
                                         </td>
+                                        <td>{`${order.user.firstName} ${order.user.lastName}`}</td>
                                     </tr>
                                     <tr
                                         key={order.id * 1000}

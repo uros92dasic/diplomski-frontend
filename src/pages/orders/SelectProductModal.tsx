@@ -33,10 +33,16 @@ const SelectProductModal: React.FC<Props> = ({ show, onHide, onSelect }) => {
         })();
     }, [page, currentUserId, searchTerm]);
 
+    useEffect(() => {
+        setPage(1);
+    }, [searchTerm]);
+
     const handleProductSelect = (product: Product) => {
         dispatch(setSearchTerm(""));
         onSelect(product);
     };
+
+    const counter = (page - 1) * 10 + 1;
 
     return (
         <div
@@ -69,22 +75,30 @@ const SelectProductModal: React.FC<Props> = ({ show, onHide, onSelect }) => {
                             onBlur={(e) => e.target.value = searchTerm}
                         />
                         <Paginator page={page} lastPage={lastPage} pageChanged={page => setPage(page)} />
-                        <ul className="list-group">
-                            {products.map((product) => (
-                                <li
-                                    key={product.id}
-                                    className="list-group-item d-flex justify-content-between align-items-center"
-                                    onClick={() => handleProductSelect(product)}
-                                    style={{ cursor: "pointer" }}
-                                >
-                                    <img alt={`product-${product.id}`} src={product.image} width="50" />
-                                    {product.title}
-                                    <span className="badge bg-primary rounded-pill">
-                                        {product.price}
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
+                        <table className="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Image</th>
+                                    <th>Title</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {products.map((product, index) => (
+                                    <tr
+                                        key={product.id}
+                                        onClick={() => handleProductSelect(product)}
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        <td>{counter + index}</td>
+                                        <td><img alt={`product-${product.id}`} src={product.image} width="50" /></td>
+                                        <td>{product.title}</td>
+                                        <td>{product.price}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

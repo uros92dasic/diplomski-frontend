@@ -22,7 +22,7 @@ class Register extends Component<PropsFromRedux> {
     email = '';
     password = '';
     passwordConfirm = '';
-    roleId = 4;
+    roleId = 2;
     state = {
         redirect: false
     };
@@ -37,7 +37,7 @@ class Register extends Component<PropsFromRedux> {
                 email: this.email,
                 password: this.password,
                 passwordConfirm: this.passwordConfirm,
-                roleId: 4
+                roleId: 2
             });
 
             this.props.showSuccessMessage("Registration successful! You can now login.");
@@ -60,6 +60,10 @@ class Register extends Component<PropsFromRedux> {
     }
 
     render() {
+        if (this.state.redirect) {
+            return <Navigate replace to={"/login"} />;
+        }
+
         return (
             <AuthContext.Consumer>
                 {(auth) => {

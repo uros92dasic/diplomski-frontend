@@ -55,15 +55,17 @@ const Roles = () => {
                 <table className="table table-striped table-sm">
                     <thead>
                         <tr>
+                            <th scope="col">#</th>
                             <th scope="col">Name</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {roles.map((role: Role) => {
+                        {roles.map((role: Role, index: number) => {
                             const isCurrentRoleCreator = role.id === currentUserRoleId;
                             return (
                                 <tr key={role.id}>
+                                    <td>{index + 1}</td>
                                     <td>{role.name}</td>
                                     <td>
                                         {!isCurrentRoleCreator && (

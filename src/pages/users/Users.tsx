@@ -56,6 +56,7 @@ const Users = () => {
         }
     };
 
+    const counter = (page - 1) * 10 + 1;
 
     return (
         <Wrapper>
@@ -67,6 +68,7 @@ const Users = () => {
                 <table className="table table-striped table-sm">
                     <thead>
                         <tr>
+                            <th scope="col">#</th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">Role</th>
@@ -74,10 +76,11 @@ const Users = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map((user: User) => {
+                        {users.map((user: User, index: number) => {
                             const isCurrentUserCreator = user.id === currentUserId;
                             return (
                                 <tr key={user.id}>
+                                    <td>{counter + index}</td>
                                     <td>{user.firstName} {user.lastName}</td>
                                     <td>{user.email}</td>
                                     <td>{user.role.name}</td>

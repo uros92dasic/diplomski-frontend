@@ -44,6 +44,12 @@ const VisitorPage = () => {
         )();
     }, [page, searchTerm]);
 
+    useEffect(() => {
+        setPage(1);
+    }, [searchTerm]);
+
+    const counter = (page - 1) * 10 + 1;
+
     return (
         <>
             <>
@@ -101,16 +107,18 @@ const VisitorPage = () => {
                             <table className="table table-striped table-sm">
                                 <thead>
                                     <tr>
-                                        <th scope="col">image</th>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Image</th>
                                         <th scope="col">Title</th>
                                         <th scope="col">Description</th>
                                         <th scope="col">Price</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {products.map((product: Product) => {
+                                    {products.map((product: Product, index: number) => {
                                         return (
                                             <tr key={product.id}>
+                                                <td>{counter + index}</td>
                                                 <td><img alt={`product-${product.id}`} src={product.image} width="50" /></td>
                                                 <td>{product.title}</td>
                                                 <td>{product.description}</td>

@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
 import { useDispatch } from "react-redux";
 import { isErrorResponse, showErrorMessage, showSuccessMessage } from "../../components/messages/Messages";
+import "../../App.css";
 
 const tableStyles = {
     counterColumnWidth: "5%",
@@ -69,7 +70,14 @@ const Users = () => {
     return (
         <Wrapper>
             <div className="pt-3 pb-2 mb-3 border-bottom">
-                <Link to={'/users/create'} className="btn btn-sm btn-outline-secondary">Add</Link>
+                <div className="header-controls">
+                    <div className="pt-3">
+                        <Link to={'/users/create'} className="btn btn-sm btn-outline-secondary">Add</Link>
+                    </div>
+                    <div className="paginator-container">
+                        <Paginator page={page} lastPage={lastPage} pageChanged={page => setPage(page)} />
+                    </div>
+                </div>
             </div>
 
             <div className="table-responsive">
@@ -120,8 +128,6 @@ const Users = () => {
                     </tbody>
                 </table>
             </div>
-
-            <Paginator page={page} lastPage={lastPage} pageChanged={page => setPage(page)} />
         </Wrapper>
     )
 }

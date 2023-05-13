@@ -28,14 +28,25 @@ const OrderCreate = () => {
     const [showProductModal, setShowProductModal] = useState(false);
 
     const handleProductSelect = (product: Product) => {
-        setProducts((prevProducts) => [
-            ...prevProducts,
-            {
-                productId: product.id.toString(),
-                quantity: "1",
-                product: product,
-            },
-        ]);
+        const existingProductIndex = products.findIndex(p => p.productId === product.id.toString());
+        if (existingProductIndex !== -1) {
+            const updatedProducts = products.map((p, idx) => {
+                if (idx === existingProductIndex) {
+                    return { ...p, quantity: (parseInt(p.quantity) + 1).toString() };
+                }
+                return p;
+            });
+            setProducts(updatedProducts);
+        } else {
+            setProducts((prevProducts) => [
+                ...prevProducts,
+                {
+                    productId: product.id.toString(),
+                    quantity: "1",
+                    product: product,
+                },
+            ]);
+        }
         setShowProductModal(false);
     };
 

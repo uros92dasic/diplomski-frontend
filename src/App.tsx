@@ -22,34 +22,41 @@ import NotFound from './pages/NotFound';
 import Message from './components/messages/Message';
 import VisitorPage from './pages/VisitorPage';
 import { AuthProvider } from './context/AuthContext';
+import { store, persistor } from './redux/configureStore';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <AuthProvider>
-          <Routes>
-            <Route path={"/visitor-page"} element={<VisitorPage />} />
-            <Route path={"/login"} element={<Login />} />
-            <Route path={"/register"} element={<Register />} />
-            <Route path={"/"} element={<Dashboard />} />
-            <Route path={"/profile"} element={<Profile />} />
-            <Route path={"/users"} element={<Users />} />
-            <Route path={"/users/create"} element={<UserCreate />} />
-            <Route path={"/users/:id/edit"} element={<UserEdit />} />
-            <Route path={"/roles"} element={<Roles />} />
-            <Route path={"/roles/create"} element={<RoleCreate />} />
-            <Route path={"/roles/:id/edit"} element={<RoleEdit />} />
-            <Route path={"/products"} element={<Products />} />
-            <Route path={"/products/create"} element={<ProductCreate />} />
-            <Route path={"/products/:id/edit"} element={<ProductEdit />} />
-            <Route path={"/orders"} element={<Orders />} />
-            <Route path={"/orders/create"} element={<OrderCreate />} />
-            <Route path={"/orders/export/:orderId"} element={<OrderExport />} />
-            <Route path={"*"} element={<NotFound />} />
-          </Routes>
-          <Message />
-        </AuthProvider>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <AuthProvider>
+              <Routes>
+                <Route path={"/visitor-page"} element={<VisitorPage />} />
+                <Route path={"/login"} element={<Login />} />
+                <Route path={"/register"} element={<Register />} />
+                <Route path={"/"} element={<Dashboard />} />
+                <Route path={"/profile"} element={<Profile />} />
+                <Route path={"/users"} element={<Users />} />
+                <Route path={"/users/create"} element={<UserCreate />} />
+                <Route path={"/users/:id/edit"} element={<UserEdit />} />
+                <Route path={"/roles"} element={<Roles />} />
+                <Route path={"/roles/create"} element={<RoleCreate />} />
+                <Route path={"/roles/:id/edit"} element={<RoleEdit />} />
+                <Route path={"/products"} element={<Products />} />
+                <Route path={"/products/create"} element={<ProductCreate />} />
+                <Route path={"/products/:id/edit"} element={<ProductEdit />} />
+                <Route path={"/orders"} element={<Orders />} />
+                <Route path={"/orders/create"} element={<OrderCreate />} />
+                <Route path={"/orders/export/:orderId"} element={<OrderExport />} />
+                <Route path={"*"} element={<NotFound />} />
+              </Routes>
+              <Message />
+            </AuthProvider>
+          </PersistGate>
+        </Provider>
       </BrowserRouter>
     </div>
   );

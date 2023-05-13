@@ -21,6 +21,9 @@ const Paginator = (props: { page: number, lastPage: number, pageChanged: (page: 
                     <button type="button" className="page-link" onClick={handlePrevious}>Previous</button>
                 </li>
                 <li className="page-item">
+                    <span className="page-link">Page: {props.page}</span>
+                </li>
+                <li className="page-item">
                     <button type="button" className="page-link" onClick={handleNext}>Next</button>
                 </li>
             </ul>

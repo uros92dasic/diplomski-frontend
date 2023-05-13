@@ -8,6 +8,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
 import { useDispatch } from "react-redux";
 import { isErrorResponse, showErrorMessage, showSuccessMessage } from "../../components/messages/Messages";
+import "../../App.css";
+import Paginator from "../../components/Paginator";
 
 const tableStyles = {
     counterColumnWidth: "5%",
@@ -22,16 +24,28 @@ const Roles = () => {
     const dispatch = useDispatch();
 
     const [roles, setRoles] = useState([]);
+    const [page, setPage] = useState(1);
+    const [lastPage, setLastPage] = useState(0);
 
     useEffect(() => {
-        (
-            async () => {
-                const { data } = await axios.get('roles');
+        (async () => {
+            try {
+                const { data } = await axios.get(`roles?page=${page}`);
 
                 setRoles(data.data);
+                setLastPage(data.meta.lastPage);
+            } catch (error) {
+                const axiosError = error as AxiosError;
+
+                if (axiosError.response && axiosError.response.data && isErrorResponse(axiosError.response.data)) {
+                    dispatch(showErrorMessage(axiosError.response.data.message));
+                } else {
+                    dispatch(showErrorMessage("Error while fetching roles."));
+                }
             }
+        }
         )();
-    }, []);
+    }, [page, dispatch]);
 
     const handleDelete = async (id: number) => {
         if (window.confirm('Are you sure you want to delete this role?')) {
@@ -54,7 +68,14 @@ const Roles = () => {
     return (
         <Wrapper>
             <div className="pt-3 pb-2 mb-3 border-bottom">
-                <Link to={'/roles/create'} className="btn btn-sm btn-outline-secondary">Add</Link>
+                <div className="header-controls">
+                    <div className="pt-3">
+                        <Link to={'/roles/create'} className="btn btn-sm btn-outline-secondary">Add</Link>
+                    </div>
+                    <div className="paginator-container">
+                        <Paginator page={page} lastPage={lastPage} pageChanged={page => setPage(page)} />
+                    </div>
+                </div>
             </div>
 
             <div className="table-responsive">

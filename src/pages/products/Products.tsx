@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
 import { showErrorMessage, showSuccessMessage } from "../../components/messages/Messages";
 import { useDispatch } from "react-redux";
+import "../../App.css";
 
 const tableStyles = {
     counterColumnWidth: "5%",
@@ -78,18 +79,25 @@ const Products = () => {
     return (
         <Wrapper>
             <div className="pt-3 pb-2 mb-3 border-bottom">
-                <Link to={'/products/create'} className="btn btn-sm btn-outline-secondary">Add</Link>
-                <div className="form-check form-switch pt-3">
-                    <input
-                        className="form-check-input"
-                        type="checkbox"
-                        id="showOnlyMyProducts"
-                        checked={showOnlyMyProducts}
-                        onChange={toggleShowOnlyMyProducts}
-                    />
-                    <label className="form-check-label" htmlFor="showOnlyMyProducts">
-                        Show only my products
-                    </label>
+                <div className="header-controls">
+                    <div className="pt-3">
+                        <Link to={'/products/create'} className="btn btn-sm btn-outline-secondary">Add</Link>
+                        <div className="form-check form-switch pt-3">
+                            <input
+                                className="form-check-input"
+                                type="checkbox"
+                                id="showOnlyMyProducts"
+                                checked={showOnlyMyProducts}
+                                onChange={toggleShowOnlyMyProducts}
+                            />
+                            <label className="form-check-label" htmlFor="showOnlyMyProducts">
+                                Show only my products
+                            </label>
+                        </div>
+                    </div>
+                    <div className="paginator-container">
+                        <Paginator page={page} lastPage={lastPage} pageChanged={page => setPage(page)} />
+                    </div>
                 </div>
             </div>
 
@@ -142,8 +150,6 @@ const Products = () => {
                     </tbody>
                 </table>
             </div>
-
-            <Paginator page={page} lastPage={lastPage} pageChanged={page => setPage(page)} />
         </Wrapper>
     );
 }

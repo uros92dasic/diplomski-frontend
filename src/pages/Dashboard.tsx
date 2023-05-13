@@ -4,10 +4,19 @@ import * as c3 from 'c3';
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useAuth } from "../context/AuthContext";
 
 const Dashboard = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [chart, setChart] = useState<c3.ChartAPI | null>(null);
+
+    const auth = useAuth();
+
+    if (!auth) {
+        throw new Error("Auth context is not provided.");
+    }
+
+    const { isLoggedIn } = auth;
 
     useEffect(() => {
         (
@@ -40,10 +49,10 @@ const Dashboard = () => {
     }, []);
 
     useEffect(() => {
-        if (chart) {
+        if (chart && isLoggedIn) {
             loadData();
         }
-    }, [selectedDate, chart]);
+    }, [selectedDate, chart, isLoggedIn]);
 
     const loadData = async () => {
         const year = selectedDate.getFullYear();

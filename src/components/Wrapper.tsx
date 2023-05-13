@@ -2,10 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import Menu from "./Menu";
 import Nav from "./Nav";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUser } from "../redux/actions/setUserAction";
-import { RootState } from "../redux/reducers";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+
+interface AxiosError extends Error {
+    response?: {
+        status: number;
+    };
+}
 
 type WrapperProps = {
     children: React.ReactNode;
@@ -14,26 +20,40 @@ type WrapperProps = {
 const Wrapper = (props: WrapperProps) => {
     const [redirect, setRedirect] = useState(false);
     const dispatch = useDispatch();
-    const user = useSelector((state: RootState) => state.user.user);
+
+    const auth = useAuth();
+
+    if (!auth) {
+        throw new Error("Auth context is not provided.");
+    }
+
+    const { isLoggedIn } = auth;
 
     useEffect(() => {
         (async () => {
-            try {
-                const { data } = await axios.get("user");
-                dispatch(
-                    setUser({
-                        id: data.id,
-                        firstName: data.firstName,
-                        lastName: data.lastName,
-                        email: data.email,
-                        role: data.role,
-                    })
-                );
-            } catch (e) {
-                setRedirect(true);
+            if (isLoggedIn) {
+                try {
+                    const { data } = await axios.get("user");
+                    dispatch(
+                        setUser({
+                            id: data.id,
+                            firstName: data.firstName,
+                            lastName: data.lastName,
+                            email: data.email,
+                            role: data.role,
+                        })
+                    );
+                } catch (e) {
+                    const axiosError = e as AxiosError;
+                    if (axiosError.response && axiosError.response.status === 403) {
+                        setRedirect(true);
+                    } else {
+                        console.error(e);
+                    }
+                }
             }
         })();
-    }, [dispatch]);
+    }, [dispatch, isLoggedIn]);
 
     if (redirect) {
         return <Navigate replace to={"/login"} />;
